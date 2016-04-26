@@ -29,5 +29,8 @@ trap "rm -rf $_f" EXIT
 curl -s -i -X $M "${API_BASE}${P}" $U $@ | awk -v tfile="$_f" 'BEGIN { C=0 }
 /^HTTP/ {print "Status: " $2}
 /^\s$/ { C=1; next }
-(C==1 && !/^\s$/) { print >> tfile }' && \
+(C==1 && !/^\s$/) { print >> tfile }'
+
+if [ -s "$_f" ]; then
     python -mjson.tool "$_f"
+fi
